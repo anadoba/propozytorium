@@ -1,0 +1,24 @@
+{
+  "name": "Propozytorium",
+  "version": "0.1.0",
+  "description": "Wieloużytkownikowa aplikacja agregująca propozycje działająca w czasie rzeczywistym",
+  "authors": [
+    "Adam Nadoba <anadoba@windowslive.com>"
+  ],
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/anadoba/propozytorium.git"
+  }, 
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4"
+  }
+}
