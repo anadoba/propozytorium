@@ -1,6 +1,129 @@
 // out: ../public/css/index.css, compress: true
-@bgColor: #eee;
+
+@bar-height: 50px;
+@header-height: 100px;
+@main-container-height: 600px;
+@main-label-height: 50px;
+
+.stretch(@var) {
+    width+_: @var * 1%;
+    height+_: @var * 1%;
+}
+
+.background-as-grey-tone(@var) {
+    background-color: lighten(gray, @var);
+}
+
+.frame(@var) {
+    border-style: solid;
+    border-width: @var;
+    border-color: black;
+}
+
+.main-label-styling() {
+    height: @main-label-height;
+    line-height: @main-label-height;
+
+    .background-as-grey-tone(0);
+    text-align: center;
+
+    margin: 0;
+
+    border-bottom-width: 2px;
+    border-bottom-style: solid;   
+}
+
+html, body { 
+    .stretch(100);
+}
 
 body {
-	background-color: @bgColor;
+    margin: 0;
+}
+
+#container {
+    width: 90%;
+    margin: 0 auto;
+    align-content: center;
+    
+    .background-as-grey-tone(20);
+    
+    .frame(2px);
+    
+    display: flex;
+    flex-direction: column;
+    
+    header {
+        height: @header-height;
+        flex-grow: 0;
+        flex-shrink: 0;
+        
+        text-align: center;
+        .frame(1px);
+        .background-as-grey-tone(0);
+    }
+    
+    #loginContainer {
+        height: @bar-height;
+        .frame(1px);
+        
+        text-align: center;
+        line-height: @bar-height;
+    }
+    
+    #subjectContainer {
+        height: @bar-height;
+        .frame(1px);
+        
+        text-align: center;
+        line-height: @bar-height;
+    }
+    
+    #mainContainer {
+        height: @main-container-height;
+        
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        justify-content: space-between;
+        
+        #propositionContainer {
+            width: 50%;
+            flex-grow: 0;
+            flex-shrink: 0;
+            
+            order: 1;
+            
+            .frame(1px);
+            .background-as-grey-tone(40);
+            
+            display: flex;
+            flex-direction: column;
+            
+            h2 {
+                .main-label-styling();  
+            }
+        }
+        
+        #resultContainer {
+            h2 {
+                .main-label-styling();  
+            }
+            
+            width: 50%;
+            order: 2;
+            text-align: justify;
+            
+            .frame(1px);
+            .background-as-grey-tone(40);
+        }
+    }
+    
+    footer {
+        height: @bar-height;
+        .frame(1px);
+        
+        text-align: center;
+        line-height: @bar-height;
+    }
 }
