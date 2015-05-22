@@ -3,11 +3,11 @@ var app = require('express')();
 var path = require('path');
 var less = require('less-middleware');
 var httpServer = require('http').Server(app);
-var io = require('socket.io')(httpServer);
 var logger = require('morgan');
 var errorHandler = require('errorhandler');
 var path = require('path');
 var static = require('serve-static');
+var socketio = require('./socket/socket')(httpServer);
 
 var port = process.env.PORT || 3000;
 var env = process.env.NODE_ENV || 'development';
