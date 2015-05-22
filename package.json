@@ -10,7 +10,7 @@
   },
   "private": true,
   "scripts": {
-    "start": "node serwer.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "errorhandler": "^1.2.2",
