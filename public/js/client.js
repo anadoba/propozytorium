@@ -17,4 +17,8 @@ $(document).ready(function () {
         console.log('Nawiązano połączenie przez Socket.io');
         socket.emit('login', 'test');
     });
+    
+    socket.on('loginResponse', function (data) {
+        console.dir(data); 
+    });
 });

@@ -1,11 +1,11 @@
 module.exports = function (app) {
     
-  var io = require('socket.io')(app);
+  var io = require('socket.io')(3001, app);
     
   io.sockets.on("connection", function (socket) {
     socket.on("login", function (data) {
-        console.dir(data);
-        io.sockets.emit("loginResponse", "login successful"); 
+        console.log(data);
+        io.sockets.emit("loginResponse", data); 
     });
     socket.on("error", function (err) {
         console.dir(err);
