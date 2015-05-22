@@ -2,7 +2,9 @@
 
 @bar-height: 50px;
 @header-height: 100px;
-@main-container-height: 600px;
+@main-container-min-height: 400px;
+@global-padding-vertical: 15px;
+@global-padding-horizontal: 15px;
 @main-label-height: 50px;
 
 .stretch(@var) {
@@ -30,20 +32,16 @@
     margin: 0;
 
     border-bottom-width: 2px;
-    border-bottom-style: solid;   
+    border-bottom-style: solid;
 }
 
-html, body { 
-    .stretch(100);
-}
 
 body {
     margin: 0;
+    padding: @global-padding-vertical @global-padding-horizontal;
 }
 
 #container {
-    width: 90%;
-    margin: 0 auto;
     align-content: center;
     
     .background-as-grey-tone(20);
@@ -67,6 +65,9 @@ body {
         height: @bar-height;
         .frame(1px);
         
+        flex-grow: 0;
+        flex-shrink: 0;
+        
         text-align: center;
         line-height: @bar-height;
     }
@@ -75,12 +76,16 @@ body {
         height: @bar-height;
         .frame(1px);
         
+        flex-grow: 0;
+        flex-shrink: 0;
+        
         text-align: center;
         line-height: @bar-height;
     }
     
     #mainContainer {
-        height: @main-container-height;
+        min-height: @main-container-min-height;
+        flex: 1;
         
         display: flex;
         flex-direction: row;
@@ -88,6 +93,10 @@ body {
         justify-content: space-between;
         
         #propositionContainer {
+            h2 {
+                .main-label-styling();  
+            }
+            
             width: 50%;
             flex-grow: 0;
             flex-shrink: 0;
@@ -96,13 +105,6 @@ body {
             
             .frame(1px);
             .background-as-grey-tone(40);
-            
-            display: flex;
-            flex-direction: column;
-            
-            h2 {
-                .main-label-styling();  
-            }
         }
         
         #resultContainer {
@@ -122,6 +124,9 @@ body {
     footer {
         height: @bar-height;
         .frame(1px);
+        
+        flex-grow: 0;
+        flex-shrink: 0;
         
         text-align: center;
         line-height: @bar-height;
