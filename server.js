@@ -7,7 +7,14 @@ var logger = require('morgan');
 var errorHandler = require('errorhandler');
 var path = require('path');
 var static = require('serve-static');
-var socketio = require('./socket/socket')(httpServer);
+var socketioManager = require('./socket/socket');
+
+var mongoose = require('mongoose');
+var mongoConfig = require('./config/mongo');
+mongoose.connect(mongoConfig.url);
+var db = mongoose.connection;
+
+socketioManager(httpServer, db);
 
 var port = process.env.PORT || 3000;
 var env = process.env.NODE_ENV || 'development';
