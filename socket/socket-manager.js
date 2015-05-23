@@ -1,7 +1,15 @@
+/*jshint node: true */
+'use strict';
+
 module.exports = function (app, db) {
     
-  var io = require('socket.io')(3001, app);
+    // launch socket.io
+    var io = require('socket.io')(3001, app);
+
+    // attach authorization module
+    require('./authentication')(io);       
     
+    // WebSocket logic
     io.sockets.on("connection", function (socket) {
         socket.on("login", function (data) {
             console.log(data);
@@ -11,9 +19,5 @@ module.exports = function (app, db) {
             console.dir(err);
         });
     });
-    
-    db.on('open', function () {
-        console.log('Połączono z MongoDB!');
-    });
-    db.on('error', console.error.bind(console, 'MongoDb Error: '));
+     
 };

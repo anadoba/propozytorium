@@ -1,4 +1,5 @@
 /*jshint node: true */
+
 module.exports = {
     url: 'mongodb://localhost/propozytorium-db'
 };

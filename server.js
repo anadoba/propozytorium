@@ -7,12 +7,16 @@ var logger = require('morgan');
 var errorHandler = require('errorhandler');
 var path = require('path');
 var static = require('serve-static');
-var socketioManager = require('./socket/socket');
+var socketioManager = require('./socket/socket-manager');
 
 var mongoose = require('mongoose');
 var mongoConfig = require('./config/mongo');
 mongoose.connect(mongoConfig.url);
 var db = mongoose.connection;
+db.on('open', function () {
+        console.log('Połączono z MongoDB!');
+});
+db.on('error', console.error.bind(console, 'MongoDb Error: '));
 
 socketioManager(httpServer, db);
 
