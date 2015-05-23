@@ -17,7 +17,7 @@ module.exports = function (socket) {
 
         User.findOne({username:username}, function(err, user) {
             if (err || !user) return callback(new Error("User not found!"));
-            return callback(null, user.password == password); // some HASH?
+            return callback(null, user.password === password);
         });
     };
                     

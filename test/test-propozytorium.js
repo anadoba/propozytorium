@@ -5,6 +5,11 @@ var io = require('socket.io-client');
 
 var socketURL = 'http://localhost:3001';
 
+var MD5 = require('blueimp-md5').md5;
+var MD5key = require('../config/authentication').key;
+
+var testUsername = 'Test';
+var testPasswordHash = MD5('test', MD5key);
 
 describe("Serwer Propozytorium", function() {
     
@@ -26,7 +31,7 @@ describe("Serwer Propozytorium", function() {
         
         client.on('connect', function() {
             client.connected.should.be.true;
-            client.emit('authentication', {username: "Test", password: "test"});
+            client.emit('authentication', {username: testUsername, password: testPasswordHash});
         });
         
         client.on('authenticated', function(flag) {
@@ -45,7 +50,7 @@ describe("Aplikacja Propozytorium", function () {
         
         client.on('connect', function() {
             client.connected.should.be.true;
-            client.emit('authentication', {username: "Test", password: "test"});
+            client.emit('authentication', {username: testUsername, password: testPasswordHash});
         });
         
         client.on('authenticated', function(flag) {
