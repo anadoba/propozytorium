@@ -17,7 +17,7 @@ describe("Serwer Propozytorium", function() {
     
     beforeEach(function() {
         client = io.connect(socketURL, {'forceNew': true});
-    })
+    });
     
     it("jest osiągalny przez protokół WebSockets", function (done) {
 
@@ -57,7 +57,7 @@ describe("Aplikacja Propozytorium", function () {
             flag.should.be.true;
             done();
         });
-    })
+    });
     
     it("odpowiada na komunikat login", function (done) {
         
