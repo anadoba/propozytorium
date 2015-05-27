@@ -3,7 +3,7 @@
 var should = require('should');
 var io = require('socket.io-client');
 
-var socketURL = 'http://localhost:3001';
+var socketURL = 'http://localhost:3000';
 
 var MD5 = require('blueimp-md5').md5;
 var MD5key = require('../config/authentication').key;

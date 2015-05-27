@@ -10,7 +10,7 @@ $(document).ready(function () {
     var socket;
     
     if (!socket || !socket.connected) {
-            socket = io({forceNew: true});
+        socket = io({forceNew: true});
     }
     
     socket.on('connect', function () {

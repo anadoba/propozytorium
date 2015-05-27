@@ -4,7 +4,7 @@
 module.exports = function (app, db) {
     
     // launch socket.io
-    var io = require('socket.io')(3001, app);
+    var io = require('socket.io')(app);
 
     // attach authorization module
     require('./authentication')(io);       
