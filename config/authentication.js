@@ -1,6 +1,8 @@
 /*jshint node: true */
 'use strict';
 
+var mongo_key = process.env.MONGO_KEY || "turbo tajny klucz";
+
 module.exports = {
-    key: "turbo tajny klucz"
+    key: mongo_key
 };

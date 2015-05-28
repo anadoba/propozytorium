@@ -1,6 +1,9 @@
 /*jshint node: true */
 'use strict';
 
+var MD5 = require('blueimp-md5').md5;
+var MD5key = require('../config/authentication').key;
+
 module.exports = function (socket) {
     
     var User = require('../model/user');
@@ -17,7 +20,7 @@ module.exports = function (socket) {
 
         User.findOne({username:username}, function(err, user) {
             if (err || !user) return callback(new Error("User not found!"));
-            return callback(null, user.password === password);
+            return callback(null, user.password === MD5(password, MD5key));
         });
     };
                     

@@ -5,11 +5,8 @@ var io = require('socket.io-client');
 
 var socketURL = 'http://localhost:3000';
 
-var MD5 = require('blueimp-md5').md5;
-var MD5key = require('../config/authentication').key;
-
 var testUsername = 'Test';
-var testPasswordHash = MD5('test', MD5key);
+var testPassword = 'test';
 
 describe("Serwer Propozytorium", function() {
     
@@ -31,7 +28,7 @@ describe("Serwer Propozytorium", function() {
         
         client.on('connect', function() {
             client.connected.should.be.true;
-            client.emit('authentication', {username: testUsername, password: testPasswordHash});
+            client.emit('authentication', {username: testUsername, password: testPassword});
         });
         
         client.on('authenticated', function(flag) {
@@ -50,7 +47,7 @@ describe("Aplikacja Propozytorium", function () {
         
         client.on('connect', function() {
             client.connected.should.be.true;
-            client.emit('authentication', {username: testUsername, password: testPasswordHash});
+            client.emit('authentication', {username: testUsername, password: testPassword});
         });
         
         client.on('authenticated', function(flag) {
@@ -67,6 +64,15 @@ describe("Aplikacja Propozytorium", function () {
         
         client.on('loginResponse', function (data) {
             data.should.equal(testMsg);
+            done();
+        });
+    });
+    
+    it("testowa lista tematów do głosowań jest pusta", function (done) {
+        client.emit('getTopics');
+        
+        client.on('topicList', function (topics) {
+            topics.length.should.equal(0);
             done();
         });
     });
