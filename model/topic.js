@@ -7,6 +7,14 @@ var topicSchema = new Schema({
         type: String,
         required: true,
         unique: true
+    },
+    neededPoints: {
+        type: Number,
+        default: 1
+    },
+    singleResult: {
+        type: Boolean,
+        default: false
     }
 });
 
