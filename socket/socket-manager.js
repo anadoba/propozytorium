@@ -12,21 +12,21 @@ module.exports = function (app, db) {
     var Topic = require('../model/topic');
     
     // WebSocket logic
-    io.sockets.on("connection", function (socket) {
-        socket.on("getTopics", function (data) {
-            Topic.find({}, function(err, topics) {
-                if (err || !topics) return callback(new Error("error getting topics from DB"));
-                
-                socket.emit('topicList', topics);
-            });
+    io.sockets.on("connection", function (client) {
+        client.on("getTopics", function (data) {
+            emitTopicListUpdate(client);
         });
-        socket.on("login", function (data) {
-            console.log(data);
-            io.sockets.emit("loginResponse", data);
-        });
-        socket.on("error", function (err) {
+        client.on("error", function (err) {
             console.dir(err);
         });
     });
-     
+    
+    
+    function emitTopicListUpdate (client) {
+        Topic.find({}, function(err, topics) {
+            if (err || !topics) return new Error("error getting topics from DB");
+
+            client.emit('topicList', topics);
+        });
+    }
 };

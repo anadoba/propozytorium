@@ -56,23 +56,11 @@ describe("Aplikacja Propozytorium", function () {
         });
     });
     
-    it("odpowiada na komunikat login", function (done) {
-        
-        var testMsg = 'krowa';
-        
-        client.emit('login', testMsg);
-        
-        client.on('loginResponse', function (data) {
-            data.should.equal(testMsg);
-            done();
-        });
-    });
-    
-    it("testowa lista tematów do głosowań jest pusta", function (done) {
+    it("wysyła listę tematów na żądanie", function (done) {
         client.emit('getTopics');
         
         client.on('topicList', function (topics) {
-            topics.length.should.equal(0);
+            Array.isArray(topics).should.be.true;
             done();
         });
     });
