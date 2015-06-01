@@ -65,4 +65,34 @@ describe("Aplikacja Propozytorium", function () {
         });
     });
     
+    it("pozwala na dodanie tematu", function (done) {
+        var nowyTemat = {
+            name: "Testowy Temat",
+            neededPoints: 1,
+            singleResult: true
+        };
+        
+        client.emit("addTopic", nowyTemat);
+        
+        client.on('topicList', function (topics) {
+            Array.isArray(topics).should.be.true;
+            // test że się dodało
+            done();
+        });
+    });
+    
+    it("pozwala na usunięcie tematu", function (done) {
+        var usunTemat = {
+            name: "Testowy Temat"
+        };
+        
+        client.emit("removeTopic", usunTemat);
+        
+        client.on('topicList', function (topics) {
+            Array.isArray(topics).should.be.true;
+            // test że już nie ma?
+            done();
+        });
+    });
+    
 });
