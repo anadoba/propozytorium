@@ -14,7 +14,7 @@ module.exports = function (app, db) {
     // WebSocket logic
     io.sockets.on("connection", function (client) {
         client.on("getTopics", function (data) {
-            emitTopicListUpdate(client);
+            emitTopicListUpdate();
         });
         
         client.on("addTopic", function (data) {
@@ -26,7 +26,7 @@ module.exports = function (app, db) {
             topic.save(function (err, topic) {
                 if (err) return console.error(err);
                 console.log(topic.name + " successfully saved to DB."); 
-                emitTopicListUpdate(client);
+                emitTopicListUpdate();
             });
         });
         
@@ -34,7 +34,7 @@ module.exports = function (app, db) {
             Topic.remove({name: data.name}, function(err) {
                 if (err) return console.error(err);
                 console.log(data.name + " successfully removed from DB.");
-                emitTopicListUpdate(client);
+                emitTopicListUpdate();
             });
             
         });
@@ -45,11 +45,11 @@ module.exports = function (app, db) {
     });
     
     
-    function emitTopicListUpdate(client) {
+    function emitTopicListUpdate() {
         Topic.find({}, function(err, topics) {
             if (err || !topics) return new Error("error getting topics from DB");
 
-            client.emit('topicList', topics);
+            io.sockets.emit('topicList', topics);
             console.log("Topic list sent to clients.");
         });
     }
