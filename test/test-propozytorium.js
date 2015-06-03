@@ -15,6 +15,7 @@ mongoose.connect(mongoConfig.url);
 
 // db models
 var Topic = require('../model/topic');
+var Proposition = require('../model/proposition');
 
 // actual tests
 describe("Serwer Propozytorium", function() {
@@ -98,6 +99,57 @@ describe("Aplikacja Propozytorium", function () {
 
                 topic.name.should.equal(nowyTemat.name);
                 done();
+            });
+        });
+    });
+    
+    it("wysyła listę propozycji na żądanie", function (done) {
+        var wybranyTemat = {
+            topic: "Testowy Temat"    
+        };
+        client.emit('getPropositions', wybranyTemat);
+        
+        client.on('propositionList', function (propositions) {
+            Array.isArray(propositions).should.be.true;
+            done();
+        });
+    });
+    
+    it("pozwala na dodanie propozycji", function (done) {
+        var nowaPropozycja = {
+            name: "Testowa Propozycja",
+            topic: "Testowy Temat"
+        };
+        
+        client.emit("addProposition", nowaPropozycja);
+        
+        client.on('propositionList', function (propositions) {
+            Array.isArray(propositions).should.be.true;
+            
+            Proposition.findOne({name: nowaPropozycja.name}, function(err, proposition) {
+                if (err || !proposition) return new Error("error getting proposition from DB");
+
+                proposition.name.should.equal(nowaPropozycja.name);
+                done();
+            });
+        });
+    });
+    
+    it("pozwala na usunięcie propozycji", function (done) {
+        var usunPropozycje = {
+            name: "Testowa Propozycja"
+        };
+        
+        client.emit("removeProposition", usunPropozycje);
+        
+        client.on('propositionList', function (propositions) {
+            Array.isArray(propositions).should.be.true;
+            
+            Proposition.findOne({name: usunPropozycje.name}, function(err, proposition) {
+                if (err) return new Error("error getting proposition from DB");
+                
+                if (!proposition) done();
+                //if (proposition === null) done();
             });
         });
     });
