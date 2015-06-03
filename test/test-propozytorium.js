@@ -135,6 +135,37 @@ describe("Aplikacja Propozytorium", function () {
         });
     });
     
+    it("pozwala na zagłosowanie na propozycję i akceptuje ją", function (done) {
+        var wybranaPropozycja = {
+            name: "Testowa Propozycja"  
+        };
+        
+        // zapisujemy stare punkty
+        var obecnaPunktacja = 0;
+        Proposition.findOne({name: wybranaPropozycja.name}, function(err, proposition) {
+            if (err || !proposition) return new Error("error getting proposition from DB");
+
+            proposition.name.should.equal(wybranaPropozycja.name);
+            obecnaPunktacja = proposition.points;
+        });
+        
+        client.emit("voteProposition", wybranaPropozycja);
+        
+        // sprawdzamy czy udało się zagłosować
+        client.on('propositionList', function (propositions) {
+            Array.isArray(propositions).should.be.true;
+            
+            Proposition.findOne({name: wybranaPropozycja.name}, function(err, proposition) {
+                if (err || !proposition) return new Error("error getting proposition from DB");
+
+                proposition.name.should.equal(wybranaPropozycja.name);
+                proposition.points.should.equal(obecnaPunktacja + 1);
+                proposition.approved.should.be.true;
+                done();
+            });
+        });
+    });
+    
     it("pozwala na usunięcie propozycji", function (done) {
         var usunPropozycje = {
             name: "Testowa Propozycja"

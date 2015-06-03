@@ -16,6 +16,7 @@ module.exports = function (app, db) {
     // WebSocket logic
     io.sockets.on("connection", function (client) {
         
+        
         // Topics
         client.on("getTopics", function (data) {
             emitTopicListUpdate();
@@ -40,6 +41,7 @@ module.exports = function (app, db) {
             });
         });
         
+        
         // Propositions
         client.on("getPropositions", function (data) {
             emitPropositionListUpdate();
@@ -60,6 +62,34 @@ module.exports = function (app, db) {
                 if (err) return console.error(err);
                 console.log("Proposition " + data.name + " successfully removed from DB.");
                 emitPropositionListUpdate();
+            });
+        });
+        
+        client.on("voteProposition", function (data) {
+            Proposition.findOne({name: data.name}, function(err, proposition) {
+                if (err || !proposition) return console.error(err);
+                
+                proposition.points += 1;
+                console.log("Proposition " + proposition.name + " voted up."); 
+                
+                // sprawdzamy, czy po głosowaniu nie musimy zaakceptować propozycji
+                var neededPoints = 0;
+                Topic.findOne({name: proposition.topic}, function(err, topic) {
+                    if (err || !topic) return new Error("error getting topic from DB");
+
+                    neededPoints = topic.neededPoints;
+                    console.log("Proposition " + proposition.name + " has " + proposition.points + "/" + neededPoints + " votes to be accepted.");
+                    if (proposition.points === neededPoints) {
+                        proposition.approved = true;
+                        console.log("Proposition " + proposition.name + " accepted.");
+                    }
+
+                    proposition.save(function (err, proposition) {
+                        if (err) return console.error(err);
+                        emitPropositionListUpdate();
+                    });
+                });
+                
             });
         });
         
