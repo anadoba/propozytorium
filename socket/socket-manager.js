@@ -70,14 +70,14 @@ module.exports = function (app, db) {
                 if (err || !proposition) return console.error(err);
                 
                 // sprawdzamy, czy użytkownik już nie głosował
-                if (proposition.votes.indexOf(data.username) !== -1) {
-                    console.log("Proposition " + proposition.name + " has been already voted by " + data.username + "! Aborting...");
+                if (proposition.votes.indexOf(client.username) !== -1) {
+                    console.log("Proposition " + proposition.name + " has been already voted by " + client.username + "! Aborting...");
                     return emitPropositionListUpdate();
                 }
                 
                 proposition.points += 1;
-                proposition.votes.push(data.username);
-                console.log("Proposition " + proposition.name + " voted up by " + data.username + "."); 
+                proposition.votes.push(client.username);
+                console.log("Proposition " + proposition.name + " voted up by " + client.username + ".");
                 
                 // sprawdzamy, czy po głosowaniu nie musimy zaakceptować propozycji
                 var neededPoints = 0;

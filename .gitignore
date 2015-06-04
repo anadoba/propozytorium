@@ -1,3 +1,4 @@
 node_modules/*
+!node_modules/socketio-auth/lib/socketio-auth.js
 bower_components/*
 npm-debug.log

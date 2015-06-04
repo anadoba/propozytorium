@@ -138,8 +138,7 @@ describe("Aplikacja Propozytorium", function () {
     
     it("pozwala na zagłosowanie na propozycję", function (done) {
         var wybranaPropozycja = {
-            name: "Testowa Propozycja",
-            username: testUsername  
+            name: "Testowa Propozycja"
         };
         
         // zapisujemy stare punkty
@@ -169,8 +168,7 @@ describe("Aplikacja Propozytorium", function () {
     
     it("nie pozwala na ponowne głosowanie przez tego samego użytkownika", function (done) {
         var wybranaPropozycja = {
-            name: "Testowa Propozycja",
-            username: testUsername
+            name: "Testowa Propozycja"
         };
         
         // zapisujemy stare punkty
@@ -211,8 +209,7 @@ describe("Aplikacja Propozytorium", function () {
         });
         
         var wybranaPropozycja = {
-            name: "Testowa Propozycja",
-            username: testUsername2
+            name: "Testowa Propozycja"
         };
         
         client.on('authenticated', function(flag) {
