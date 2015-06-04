@@ -6,6 +6,7 @@ var io = require('socket.io-client');
 // socket configuration
 var socketURL = 'http://localhost:3000';
 var testUsername = 'Test';
+var testUsername2 = 'Test2';
 var testPassword = 'test';
 
 // db configuration
@@ -85,7 +86,7 @@ describe("Aplikacja Propozytorium", function () {
     it("pozwala na dodanie tematu", function (done) {
         var nowyTemat = {
             name: "Testowy Temat",
-            neededPoints: 1,
+            neededPoints: 2,
             singleResult: true
         };
         
@@ -135,9 +136,10 @@ describe("Aplikacja Propozytorium", function () {
         });
     });
     
-    it("pozwala na zagłosowanie na propozycję i akceptuje ją", function (done) {
+    it("pozwala na zagłosowanie na propozycję", function (done) {
         var wybranaPropozycja = {
-            name: "Testowa Propozycja"  
+            name: "Testowa Propozycja",
+            username: testUsername  
         };
         
         // zapisujemy stare punkty
@@ -160,8 +162,74 @@ describe("Aplikacja Propozytorium", function () {
 
                 proposition.name.should.equal(wybranaPropozycja.name);
                 proposition.points.should.equal(obecnaPunktacja + 1);
-                proposition.approved.should.be.true;
                 done();
+            });
+        });
+    });
+    
+    it("nie pozwala na ponowne głosowanie przez tego samego użytkownika", function (done) {
+        var wybranaPropozycja = {
+            name: "Testowa Propozycja",
+            username: testUsername
+        };
+        
+        // zapisujemy stare punkty
+        var obecnaPunktacja = 0;
+        Proposition.findOne({name: wybranaPropozycja.name}, function(err, proposition) {
+            if (err || !proposition) return new Error("error getting proposition from DB");
+
+            proposition.name.should.equal(wybranaPropozycja.name);
+            obecnaPunktacja = proposition.points;
+        });
+        
+        client.emit("voteProposition", wybranaPropozycja);
+        
+        // sprawdzamy czy udało się zagłosować
+        client.on('propositionList', function (propositions) {
+            Array.isArray(propositions).should.be.true;
+            
+            Proposition.findOne({name: wybranaPropozycja.name}, function(err, proposition) {
+                if (err || !proposition) return new Error("error getting proposition from DB");
+
+                proposition.name.should.equal(wybranaPropozycja.name);
+                proposition.points.should.equal(obecnaPunktacja);
+                done();
+            });
+        });
+    });
+    
+    it("akceptuje propozycję przy wymaganej ilości głosów", function (done) {
+        // loguję się jako inny użytkownik
+        client.disconnect();
+        client = io.connect(socketURL, {
+            'forceNew': true,
+            'reconnect': false
+        });
+        client.on('connect', function() {
+            client.connected.should.be.true;
+            client.emit('authentication', {username: testUsername2, password: testPassword});
+        });
+        
+        var wybranaPropozycja = {
+            name: "Testowa Propozycja",
+            username: testUsername2
+        };
+        
+        client.on('authenticated', function(flag) {
+            flag.should.be.true;
+            
+            client.emit("voteProposition", wybranaPropozycja);
+            
+            client.on('propositionList', function (propositions) {
+                Array.isArray(propositions).should.be.true;
+
+                Proposition.findOne({name: wybranaPropozycja.name}, function(err, proposition) {
+                    if (err || !proposition) return new Error("error getting proposition from DB");
+
+                    proposition.name.should.equal(wybranaPropozycja.name);
+                    proposition.approved.should.be.true;
+                    done();
+                });
             });
         });
     });

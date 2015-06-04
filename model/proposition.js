@@ -15,6 +15,7 @@ var propositionSchema = new Schema({
         type: Number,
         default: 0
     },
+    votes: [String],
     approved: {
         type: Boolean,
         default: false

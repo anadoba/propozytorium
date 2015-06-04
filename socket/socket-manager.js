@@ -69,8 +69,15 @@ module.exports = function (app, db) {
             Proposition.findOne({name: data.name}, function(err, proposition) {
                 if (err || !proposition) return console.error(err);
                 
+                // sprawdzamy, czy użytkownik już nie głosował
+                if (proposition.votes.indexOf(data.username) !== -1) {
+                    console.log("Proposition " + proposition.name + " has been already voted by " + data.username + "! Aborting...");
+                    return emitPropositionListUpdate();
+                }
+                
                 proposition.points += 1;
-                console.log("Proposition " + proposition.name + " voted up."); 
+                proposition.votes.push(data.username);
+                console.log("Proposition " + proposition.name + " voted up by " + data.username + "."); 
                 
                 // sprawdzamy, czy po głosowaniu nie musimy zaakceptować propozycji
                 var neededPoints = 0;
