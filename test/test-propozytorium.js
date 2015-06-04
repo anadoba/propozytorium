@@ -136,6 +136,15 @@ describe("Aplikacja Propozytorium", function () {
         });
     });
     
+    it("oznacza nowy temat jako aktywny", function (done) {
+        Topic.findOne({name: "Testowy Temat"}, function(err, topic) {
+            if (err || !topic) return new Error("error getting topic from DB");
+
+            topic.isActive.should.be.true;
+            done();
+        });
+    });
+    
     it("pozwala na zagłosowanie na propozycję", function (done) {
         var wybranaPropozycja = {
             name: "Testowa Propozycja"
@@ -228,6 +237,31 @@ describe("Aplikacja Propozytorium", function () {
                     done();
                 });
             });
+        });
+    });
+    
+    it("temat z pojedynczym wynikiem i jedną już zaakceptowaną propozycją powinien być nieaktywny", function (done) {
+        
+        // temat jest singleResult
+        Topic.findOne({name: "Testowy Temat"}, function(err, topic) {
+            if (err || !topic) return new Error("error getting topic from DB");
+
+            topic.singleResult.should.be.true;
+        });
+        
+        // mamy jedną zaakceptowaną propozycję w tym temacie
+        Proposition.find({topic: "Testowy Temat", approved: true}, function(err, propositions) {
+            if (err || !propositions) return new Error("error getting proposition from DB");
+
+            propositions.length.should.equal(1);
+        });
+        
+        // więc temat powinien być nieaktywny
+        Topic.findOne({name: "Testowy Temat"}, function(err, topic) {
+            if (err || !topic) return new Error("error getting topic from DB");
+
+            topic.isActive.should.be.false;
+            done();
         });
     });
     

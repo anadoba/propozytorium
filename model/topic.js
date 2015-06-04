@@ -15,6 +15,10 @@ var topicSchema = new Schema({
     singleResult: {
         type: Boolean,
         default: false
+    },
+    isActive: {
+        type: Boolean,
+        default: true
     }
 });
 

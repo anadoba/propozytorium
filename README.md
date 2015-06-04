@@ -1,23 +1,23 @@
 Propozytorium
 ========================
 
-Aplikacja agreguj¹ca propozycje
+Aplikacja agregujÄ…ca propozycje
 --------------------------------------
 
-Wielu u¿ytkowników jednoczeœnie pod³¹cza siê do aplikacji. 
-Nastêpnie administrator og³asza moment g³osowania.
-U¿ytkownicy w czasie rzeczywistym dodaj¹ swoje propozycje do listy oczekuj¹cych sugestii. Jednoczeœnie g³osuj¹ na te ju¿ istniej¹ce. 
-Jeœli dany obiekt z oczekuj¹cych otrzyma X g³osów - jest awansowany do listy zaakceptowanych, widocznej na bie¿¹co.
+Wielu uÅ¼ytkownikÃ³w jednoczeÅ›nie podÅ‚Ä…cza siÄ™ do aplikacji. 
+NastÄ™pnie administrator ogÅ‚asza moment gÅ‚osowania.
+UÅ¼ytkownicy w czasie rzeczywistym dodajÄ… swoje propozycje do listy oczekujÄ…cych sugestii. JednoczeÅ›nie gÅ‚osujÄ… na te juÅ¼ istniejÄ…ce. 
+JeÅ›li dany obiekt z oczekujÄ…cych otrzyma X gÅ‚osÃ³w - jest awansowany do listy zaakceptowanych, widocznej na bieÅ¼Ä…co.
 
-Program posiada równie¿ opcjê braku g³osowania na dane propozycje. 
-Wtedy mo¿e s³u¿yæ jako lista zakupów, b¹dŸ te¿ lista TODO.
+Program posiada rÃ³wnieÅ¼ opcjÄ™ braku gÅ‚osowania na dane propozycje. 
+Wtedy moÅ¼e sÅ‚uÅ¼yÄ‡ jako lista zakupÃ³w, bÄ…dÅº teÅ¼ lista TODO.
 
-Oprócz tego mo¿emy ustaliæ, czy dany wybór jest jednorazowy (np deklarowanie siê na pewne danie do zjedzenia wspólnie w restauracji), 
-czy te¿ wielokrotny (g³osowanie nad ideami na firmowego bloga)
+OprÃ³cz tego moÅ¼emy ustaliÄ‡ czy dany wybÃ³r koÅ„czy siÄ™ tylko jednÄ… sÅ‚usznÄ… opcjÄ… (np "gdzie dzisiaj idziemy na obiad?"), 
+czy teÅ¼ wieloma (gÅ‚osowanie nad ideami na firmowego bloga)
 
 **Lista potencjalnych use-case**:  
-- ustalanie najpotrzebniejszych rzeczy do kupienia w ograniczonym bud¿ecie  
-- wybór miejsca na wspólne wyjœcie dla grupy osób  
-- rejestr zadañ do wykonania  
-- lista zakupów  
-- g³osowanie nad tematami prac zaliczeniowych na TSW :)
+- ustalanie najpotrzebniejszych rzeczy do kupienia w ograniczonym budÅ¼ecie  
+- wybÃ³r miejsca na wspÃ³lne wyjÅ›cie dla grupy osÃ³b  
+- rejestr zadaÅ„ do wykonania  
+- lista zakupÃ³w  
+- gÅ‚osowanie nad tematami prac zaliczeniowych na TSW :)

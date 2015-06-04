@@ -71,7 +71,7 @@ module.exports = function (app, db) {
                 
                 // sprawdzamy, czy użytkownik już nie głosował
                 if (proposition.votes.indexOf(client.username) !== -1) {
-                    console.log("Proposition " + proposition.name + " has been already voted by " + client.username + "! Aborting...");
+                    console.log("Proposition " + proposition.name + " has been already voted by " + client.username + " - aborting...");
                     return emitPropositionListUpdate();
                 }
                 
@@ -89,6 +89,15 @@ module.exports = function (app, db) {
                     if (proposition.points === neededPoints) {
                         proposition.approved = true;
                         console.log("Proposition " + proposition.name + " accepted.");
+                        
+                        if (topic.singleResult === true) {
+                            console.log("Topic " + topic.name + " was type singleResult - deactivating it...");
+                            topic.isActive = false;
+                            topic.save(function (err, topic) {
+                                if (err) return console.error(err);
+                                emitTopicListUpdate();
+                            });
+                        }
                     }
 
                     proposition.save(function (err, proposition) {
@@ -112,7 +121,7 @@ module.exports = function (app, db) {
             if (err || !topics) return new Error("error getting topics from DB");
 
             io.sockets.emit('topicList', topics);
-            console.log("Topic list sent to clients.");
+            console.log("Topic list update sent to clients.");
         });
     }
     
@@ -121,7 +130,7 @@ module.exports = function (app, db) {
             if (err || !propositions) return new Error("error getting propositions from DB");
 
             io.sockets.emit('propositionList', propositions);
-            console.log("Proposition list sent to clients.");
+            console.log("Proposition list update sent to clients.");
         });
     }
 };
