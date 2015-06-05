@@ -16,10 +16,16 @@ $(document).ready(function() {
     var disconnectButton = $('#disconnectButton');
     var statusIndicator = $('#status');
     
+    // do usuniecia
+    loginText.val("Test");
+    passwordText.val("test");
+    
+    var topicContainer = $('#topicContainer');
+    var topicSelect = $('#topicSelect');
     var propositionContainer = $('#propositionContainer');
     var resultContainer = $('#resultContainer');
     
-    connectButton.prop("disabled", true);
+    //connectButton.prop("disabled", true);
     disconnectButton.prop("disabled", true);
     
     loginText.on('input', function() {
@@ -59,7 +65,19 @@ $(document).ready(function() {
             socket.emit('getPropositions');
         });
         
+        socket.on('topicList', function(data) {
+            for (var indeks in data) {
+                topicSelect.append('<option value="' + data[indeks].name + '">' + data[indeks].name + '</option>');
+            }
+        });
+        
+        topicSelect.on('change', function() {
+            socket.emit('getPropositions');
+        });
+        
         socket.on('propositionList', function(data) {
+            data = data.filter(function(obj) {if (obj.topic === topicSelect.val()) return true; else return false;});
+            
             propositionContainer.html("");
             resultContainer.html("");
             for (var indeks in data) {
@@ -77,13 +95,16 @@ $(document).ready(function() {
             '<div id="proposition">' + 
                 '<div id="vote">' +
                     proposition.points + '&nbsp;' +
-                    '<input type="button" value="+" action="voteOn(' + proposition.name + ')"' + ((proposition.votes.indexOf(username) !== -1) ? 'disabled' : '') + '>' +
+                    '<input id=' + proposition._id + ' type="button" value="+"' + ((proposition.votes.indexOf(username) !== -1) ? 'disabled' : '') + '>' +
                 '</div>' +
                 '<div id="body">' +
                     proposition.name +
                 '</div>' +
             '</div>';
         propositionContainer.append(html);
+        $('#' + proposition._id).click(function() {
+            voteOn(proposition.name);    
+        });
     }
     
     function appendResult(proposition) {
@@ -97,7 +118,7 @@ $(document).ready(function() {
     }
     
     function voteOn(name) {
-            
+        socket.emit('voteProposition', {"name": name});
     }
     
     disconnectButton.click(function() {
