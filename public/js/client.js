@@ -3,17 +3,21 @@
 /* devel: true */
 /* global io: false */
 /* global $: false */
-"use strict";
 
 $(document).ready(function() {
     
     var socket;
+    
+    var username;
     
     var loginText = $('#loginText');
     var passwordText = $('#passwordText');
     var connectButton = $('#connectButton');
     var disconnectButton = $('#disconnectButton');
     var statusIndicator = $('#status');
+    
+    var propositionContainer = $('#propositionContainer');
+    var resultContainer = $('#resultContainer');
     
     connectButton.prop("disabled", true);
     disconnectButton.prop("disabled", true);
@@ -40,14 +44,61 @@ $(document).ready(function() {
             socket.emit('authentication', authenticationData);
         });
         
-        socket.on('authenticated', function() {
+        socket.on('authenticated', function(flag) {
             loginText.prop("disabled", true);
             passwordText.prop("disabled", true);
             connectButton.prop("disabled", true);
             disconnectButton.prop("disabled", false);
             statusIndicator.prop("src", "img/bullet_green.png");
+            
+            if (flag === true) {
+                username = loginText.val();    
+            }
+            
+            socket.emit('getTopics');
+            socket.emit('getPropositions');
+        });
+        
+        socket.on('propositionList', function(data) {
+            propositionContainer.html("");
+            resultContainer.html("");
+            for (var indeks in data) {
+                if (data[indeks].approved === false) {
+                    appendProposition(data[indeks]);
+                } else {
+                    appendResult(data[indeks]);
+                }
+            }
         });
     });
+    
+    function appendProposition(proposition) {
+        var html = 
+            '<div id="proposition">' + 
+                '<div id="vote">' +
+                    proposition.points + '&nbsp;' +
+                    '<input type="button" value="+" action="voteOn(' + proposition.name + ')"' + ((proposition.votes.indexOf(username) !== -1) ? 'disabled' : '') + '>' +
+                '</div>' +
+                '<div id="body">' +
+                    proposition.name +
+                '</div>' +
+            '</div>';
+        propositionContainer.append(html);
+    }
+    
+    function appendResult(proposition) {
+        var html = 
+            '<div id="proposition">' +
+                '<div id="body">' +
+                    proposition.name +
+                '</div>' +
+            '</div>';
+        resultContainer.append(html);
+    }
+    
+    function voteOn(name) {
+            
+    }
     
     disconnectButton.click(function() {
         socket.disconnect();
@@ -56,5 +107,8 @@ $(document).ready(function() {
         passwordText.prop("disabled", false);
         connectButton.prop("disabled", false);
         disconnectButton.prop("disabled", true);
+        
+        loginText.val("");
+        passwordText.val("");
     });
 });
