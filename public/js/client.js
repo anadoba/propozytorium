@@ -5,20 +5,56 @@
 /* global $: false */
 "use strict";
 
-$(document).ready(function () {
+$(document).ready(function() {
     
     var socket;
     
-    if (!socket || !socket.connected) {
-        socket = io({forceNew: true});
-    }
+    var loginText = $('#loginText');
+    var passwordText = $('#passwordText');
+    var connectButton = $('#connectButton');
+    var disconnectButton = $('#disconnectButton');
+    var statusIndicator = $('#status');
     
-    socket.on('connect', function () {
-        console.log('Nawiązano połączenie przez Socket.io');
-        socket.emit('login', 'test');
+    connectButton.prop("disabled", true);
+    disconnectButton.prop("disabled", true);
+    
+    loginText.on('input', function() {
+       if (this.value.length === 0) {
+           connectButton.prop("disabled", true);
+       } else {
+           connectButton.prop("disabled", false);
+       }
     });
     
-    socket.on('loginResponse', function (data) {
-        console.dir(data); 
+    connectButton.click(function() {
+        if (!socket || !socket.connected) {
+            socket= io({forceNew: true});
+        }
+        
+        socket.on('connect', function() {
+            var authenticationData = {
+                "username": loginText.val(),
+                "password": passwordText.val()
+            };
+            
+            socket.emit('authentication', authenticationData);
+        });
+        
+        socket.on('authenticated', function() {
+            loginText.prop("disabled", true);
+            passwordText.prop("disabled", true);
+            connectButton.prop("disabled", true);
+            disconnectButton.prop("disabled", false);
+            statusIndicator.prop("src", "img/bullet_green.png");
+        });
+    });
+    
+    disconnectButton.click(function() {
+        socket.disconnect();
+        statusIndicator.prop("src", "img/bullet_red.png");
+        loginText.prop("disabled", false);
+        passwordText.prop("disabled", false);
+        connectButton.prop("disabled", false);
+        disconnectButton.prop("disabled", true);
     });
 });
