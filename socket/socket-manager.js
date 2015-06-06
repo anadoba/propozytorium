@@ -18,7 +18,7 @@ module.exports = function (app, db) {
         
         
         // Topics
-        client.on("getTopics", function (data) {
+        client.on("getTopicList", function (data) {
             emitTopicListUpdate();
         });
         client.on("addTopic", function (data) {
@@ -43,7 +43,7 @@ module.exports = function (app, db) {
         
         
         // Propositions
-        client.on("getPropositions", function (data) {
+        client.on("getPropositionList", function (data) {
             emitPropositionListUpdate();
         });
         client.on("addProposition", function (data) {

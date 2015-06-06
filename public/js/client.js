@@ -22,8 +22,8 @@ $(document).ready(function() {
     
     var topicContainer = $('#topicContainer');
     var topicSelect = $('#topicSelect');
-    var propositionContainer = $('#propositionContainer');
-    var resultContainer = $('#resultContainer');
+    var propositionContainer = $('#propositionList');
+    var resultContainer = $('#resultList');
     
     //connectButton.prop("disabled", true);
     disconnectButton.prop("disabled", true);
@@ -61,18 +61,18 @@ $(document).ready(function() {
                 username = loginText.val();    
             }
             
-            socket.emit('getTopics');
-            socket.emit('getPropositions');
+            socket.emit('getTopicList');
         });
         
         socket.on('topicList', function(data) {
             for (var indeks in data) {
                 topicSelect.append('<option value="' + data[indeks].name + '">' + data[indeks].name + '</option>');
             }
+            socket.emit('getPropositionList');
         });
         
         topicSelect.on('change', function() {
-            socket.emit('getPropositions');
+            socket.emit('getPropositionList');
         });
         
         socket.on('propositionList', function(data) {

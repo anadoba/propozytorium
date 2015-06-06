@@ -75,7 +75,7 @@ describe("Aplikacja Propozytorium", function () {
     });
     
     it("wysyła listę tematów na żądanie", function (done) {
-        client.emit('getTopics');
+        client.emit('getTopicList');
         
         client.on('topicList', function (topics) {
             Array.isArray(topics).should.be.true;
@@ -108,7 +108,7 @@ describe("Aplikacja Propozytorium", function () {
         var wybranyTemat = {
             topic: "Testowy Temat"    
         };
-        client.emit('getPropositions', wybranyTemat);
+        client.emit('getPropositionList', wybranyTemat);
         
         client.on('propositionList', function (propositions) {
             Array.isArray(propositions).should.be.true;
