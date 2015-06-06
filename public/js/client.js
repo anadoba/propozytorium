@@ -12,8 +12,10 @@ $(document).ready(function() {
     
     var loginText = $('#loginText');
     var passwordText = $('#passwordText');
+    var newPropositionText = $('#newPropositionText');
     var connectButton = $('#connectButton');
     var disconnectButton = $('#disconnectButton');
+    var addPropositionButton = $('#addProposition');
     var statusIndicator = $('#status');
     
     // do usuniecia
@@ -27,12 +29,23 @@ $(document).ready(function() {
     
     //connectButton.prop("disabled", true);
     disconnectButton.prop("disabled", true);
+    addPropositionButton.prop("disabled", true);
+    newPropositionText.prop("disabled", true);
+    topicSelect.prop("disabled", true);
     
     loginText.on('input', function() {
        if (this.value.length === 0) {
            connectButton.prop("disabled", true);
        } else {
            connectButton.prop("disabled", false);
+       }
+    });
+    
+    newPropositionText.on('input', function() {
+       if (this.value.length === 0) {
+           addPropositionButton.prop("disabled", true);
+       } else {
+           addPropositionButton.prop("disabled", false);
        }
     });
     
@@ -55,6 +68,8 @@ $(document).ready(function() {
             passwordText.prop("disabled", true);
             connectButton.prop("disabled", true);
             disconnectButton.prop("disabled", false);
+            newPropositionText.prop("disabled", false);
+            topicSelect.prop("disabled", false);
             statusIndicator.prop("src", "img/bullet_green.png");
             
             if (flag === true) {
@@ -121,6 +136,16 @@ $(document).ready(function() {
         socket.emit('voteProposition', {"name": name});
     }
     
+    addPropositionButton.click(function() {
+        var newProposition = {
+            "name": newPropositionText.val(),
+            "topic": topicSelect.val()
+        };
+        socket.emit('addProposition', newProposition);
+        newPropositionText.val("");
+        addPropositionButton.prop("disabled", true);
+    });
+    
     disconnectButton.click(function() {
         socket.disconnect();
         statusIndicator.prop("src", "img/bullet_red.png");
@@ -128,8 +153,11 @@ $(document).ready(function() {
         passwordText.prop("disabled", false);
         connectButton.prop("disabled", false);
         disconnectButton.prop("disabled", true);
+        newPropositionText.prop("disabled", true);
+        topicSelect.prop("disabled", true);
         
         loginText.val("");
         passwordText.val("");
+        newPropositionText.val("");
     });
 });
