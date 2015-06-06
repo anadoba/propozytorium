@@ -9,6 +9,9 @@ $(document).ready(function() {
     var socket;
     
     var username;
+    var selectedTopic;
+    
+    var firstSelectionDone = false;
     
     var loginText = $('#loginText');
     var passwordText = $('#passwordText');
@@ -80,18 +83,26 @@ $(document).ready(function() {
         });
         
         socket.on('topicList', function(data) {
+            topicSelect.html("");
             for (var indeks in data) {
                 topicSelect.append('<option value="' + data[indeks].name + '">' + data[indeks].name + '</option>');
+            }
+            if (firstSelectionDone === false) {
+                selectedTopic = data[0].name;
+                firstSelectionDone = true;
+            } else {
+                topicSelect.val(selectedTopic);    
             }
             socket.emit('getPropositionList');
         });
         
         topicSelect.on('change', function() {
+            selectedTopic = this.value;
             socket.emit('getPropositionList');
         });
         
         socket.on('propositionList', function(data) {
-            data = data.filter(function(obj) {if (obj.topic === topicSelect.val()) return true; else return false;});
+            data = data.filter(function(obj) {if (obj.topic === selectedTopic) return true; else return false;});
             
             propositionContainer.html("");
             resultContainer.html("");
@@ -139,7 +150,7 @@ $(document).ready(function() {
     addPropositionButton.click(function() {
         var newProposition = {
             "name": newPropositionText.val(),
-            "topic": topicSelect.val()
+            "topic": selectedTopic
         };
         socket.emit('addProposition', newProposition);
         newPropositionText.val("");
