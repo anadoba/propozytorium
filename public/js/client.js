@@ -15,11 +15,17 @@ $(document).ready(function() {
     
     var loginText = $('#loginText');
     var passwordText = $('#passwordText');
+    var newTopicText = $('#newTopicText');
     var newPropositionText = $('#newPropositionText');
+    
     var connectButton = $('#connectButton');
     var disconnectButton = $('#disconnectButton');
+    var addTopicButton = $('#addTopic');
     var addPropositionButton = $('#addProposition');
+    
     var statusIndicator = $('#status');
+    var newTopicSingleResult = $('#newTopicSingleResult');
+    var newTopicNeededPoints = $('#newTopicNeededPoints');
     
     // do usuniecia
     loginText.val("Test");
@@ -33,14 +39,27 @@ $(document).ready(function() {
     //connectButton.prop("disabled", true);
     disconnectButton.prop("disabled", true);
     addPropositionButton.prop("disabled", true);
+    addTopicButton.prop("disabled", true);
     newPropositionText.prop("disabled", true);
     topicSelect.prop("disabled", true);
+    newTopicText.prop("disabled", true);
+    newTopicNeededPoints.prop("disabled", true);
+    newTopicSingleResult.prop("disabled", true);
+    newTopicNeededPoints.val(1);
     
     loginText.on('input', function() {
        if (this.value.length === 0) {
            connectButton.prop("disabled", true);
        } else {
            connectButton.prop("disabled", false);
+       }
+    });
+    
+    newTopicText.on('input', function() {
+       if (this.value.length === 0) {
+           addTopicButton.prop("disabled", true);
+       } else {
+           addTopicButton.prop("disabled", false);
        }
     });
     
@@ -73,6 +92,9 @@ $(document).ready(function() {
             disconnectButton.prop("disabled", false);
             newPropositionText.prop("disabled", false);
             topicSelect.prop("disabled", false);
+            newTopicText.prop("disabled", false);
+            newTopicNeededPoints.prop("disabled", false);
+            newTopicSingleResult.prop("disabled", false);
             statusIndicator.prop("src", "img/bullet_green.png");
             
             if (flag === true) {
@@ -156,6 +178,18 @@ $(document).ready(function() {
         socket.emit('voteProposition', {"name": name});
     }
     
+    addTopicButton.click(function() {
+        var newTopic = {
+            "name": newTopicText.val(),
+            "neededPoints": newTopicNeededPoints.val(),
+            "singleResult": newTopicSingleResult.prop("checked")
+        };
+        socket.emit('addTopic', newTopic);
+        newTopicText.val("");
+        newTopicNeededPoints.val(1);
+        newTopicSingleResult.prop("checked", false);
+    });
+    
     addPropositionButton.click(function() {
         var newProposition = {
             "name": newPropositionText.val(),
@@ -175,6 +209,10 @@ $(document).ready(function() {
         disconnectButton.prop("disabled", true);
         newPropositionText.prop("disabled", true);
         topicSelect.prop("disabled", true);
+        addTopicButton.prop("disabled", true);
+        newTopicText.prop("disabled", true);
+        newTopicNeededPoints.prop("disabled", true);
+        newTopicSingleResult.prop("disabled", true);
         
         loginText.val("");
         passwordText.val("");
