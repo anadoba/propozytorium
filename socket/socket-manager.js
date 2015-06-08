@@ -51,10 +51,29 @@ module.exports = function (app, db) {
                 name: data.name,
                 topic: data.topic
             });
-            proposition.save(function (err, proposition) {
-                if (err) return console.error(err);
-                console.log("Proposition " + proposition.name + " successfully saved to DB."); 
-                emitPropositionListUpdate();
+            Topic.findOne({name: proposition.topic}, function(err, topic) {
+                if (err || !topic) return new Error("error getting topic from DB");
+
+                if (topic.neededPoints === 0) {
+                    proposition.approved = true;
+                    
+                    console.log("Proposition " + proposition.name + " successfully added as result.");
+                    
+                    if (topic.singleResult === true) {
+                        topic.isActive = false;
+                        
+                        topic.save(function (err, topic) {
+                            if (err) return console.error(err);
+                            console.log("Topic " + topic.name + " made inactive because it's single result"); 
+                            emitTopicListUpdate();
+                        });
+                    }
+                }
+                proposition.save(function (err, proposition) {
+                    if (err) return console.error(err);
+                    console.log("Proposition " + proposition.name + " successfully saved to DB."); 
+                    emitPropositionListUpdate();
+                });
             });
         });
         client.on("removeProposition", function (data) {
@@ -106,6 +125,19 @@ module.exports = function (app, db) {
                     });
                 });
                 
+            });
+        });
+        
+        client.on("truncateTopic", function(data) {
+            Proposition.remove({topic: data.name}, function(err) {
+                if (err) return console.error(err);
+                
+                Topic.remove({name: data.name}, function(err) {
+                    if (err) return console.error(err);
+                    console.log("Topic " + data.name + " truncated completely.");
+                    emitPropositionListUpdate();
+                    emitTopicListUpdate();
+                });  
             });
         });
         

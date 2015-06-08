@@ -303,4 +303,40 @@ describe("Aplikacja Propozytorium", function () {
         });
     });
     
+    it("musi wszystkie propozycje akceptować, jeśli wymagane punkty w temacie to 0", function (done) {
+        var nowyTemat = {
+            name: "Lista zadań do wykonania",
+            neededPoints: 0,
+            singleResult: false
+        };
+        
+        client.emit("addTopic", nowyTemat);
+        
+        client.on('topicList', function (topics) {
+            Array.isArray(topics).should.be.true;
+            
+            var nowaPropozycja = {
+                name: "Umyć zęby",
+                topic: "Lista zadań do wykonania"
+            };
+            client.emit("addProposition", nowaPropozycja);
+            
+            var nowaPropozycja2 = {
+                    name: "Zjeść śniadanie",
+                    topic: "Lista zadań do wykonania"
+                };
+            client.emit("addProposition", nowaPropozycja2);
+            
+            setTimeout(function () {
+                Proposition.find({topic: nowaPropozycja.topic}, function(err, propositions) {
+                    if (err || !propositions) return new Error("error getting propositions from DB");
+
+                    propositions.filter(function(obj) {if(obj.approved === true) return true; else return false;});
+                    propositions.length.should.equal(2);
+                    client.emit("truncateTopic", {"name": nowaPropozycja.topic});
+                    done();
+                });
+            }, 100);
+        });
+    });
 });

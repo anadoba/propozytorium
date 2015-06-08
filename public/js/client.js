@@ -93,12 +93,21 @@ $(document).ready(function() {
             } else {
                 topicSelect.val(selectedTopic);    
             }
+            
+            var obecnyTemat = data.filter(function(obj){if(obj.name === selectedTopic) return true; else return false;});
+            if (obecnyTemat[0].isActive === true) {
+                $('div.fadeable').unblock();
+            } else {
+                $('div.fadeable').block({ message: "Głosowanie zakończone" }); 
+            }
+            
             socket.emit('getPropositionList');
         });
         
         topicSelect.on('change', function() {
             selectedTopic = this.value;
-            socket.emit('getPropositionList');
+            
+            socket.emit('getTopicList');
         });
         
         socket.on('propositionList', function(data) {
