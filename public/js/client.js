@@ -121,10 +121,16 @@ $(document).ready(function() {
             
             var obecnyTemat = data.filter(function(obj){if(obj.name === selectedTopic) return true; else return false;});
             if (obecnyTemat[0].isActive === true) {
-                $('div.fadeable').unblock();
+                $('div.fadeableContainer').unblock();
             } else {
-                $('div.fadeable').block({ message: "Głosowanie zakończone" }); 
+                $('div.fadeableContainer').block({ message: "Głosowanie zakończone" }); 
             }
+            if (obecnyTemat[0].neededPoints !== 0) {
+                $('div.fadeableList').unblock();
+            } else {
+                $('div.fadeableList').block({ message: "Wszystkie propozycje są akceptowane" }); 
+            }
+            
             
             topicNeededPoints.val(obecnyTemat[0].neededPoints);
             topicSingleResult.prop("checked", obecnyTemat[0].singleResult);

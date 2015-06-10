@@ -305,7 +305,7 @@ describe("Aplikacja Propozytorium", function () {
     
     it("musi wszystkie propozycje akceptować, jeśli wymagane punkty w temacie to 0", function (done) {
         var nowyTemat = {
-            name: "Lista zadań do wykonania",
+            name: "Lista zadań do wykonania!",
             neededPoints: 0,
             singleResult: false
         };
@@ -317,13 +317,13 @@ describe("Aplikacja Propozytorium", function () {
             
             var nowaPropozycja = {
                 name: "Umyć zęby",
-                topic: "Lista zadań do wykonania"
+                topic: "Lista zadań do wykonania!"
             };
             client.emit("addProposition", nowaPropozycja);
             
             var nowaPropozycja2 = {
                     name: "Zjeść śniadanie",
-                    topic: "Lista zadań do wykonania"
+                    topic: "Lista zadań do wykonania!"
                 };
             client.emit("addProposition", nowaPropozycja2);
             

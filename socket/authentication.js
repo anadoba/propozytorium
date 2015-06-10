@@ -19,10 +19,22 @@ module.exports = function (socket) {
         var password = data.password;
 
         User.findOne({username:username}, function(err, user) {
-            if (err || !user) return callback(new Error("User not found!"));
-            return callback(null, user.password === MD5(password, MD5key));
+            if (err) return callback(new Error("Mongo error!"));
+            if (!user) {
+                var newUser = new User({
+                    "username": username,
+                    "password": MD5(password, MD5key)
+                });
+                newUser.save(function (err, user) {
+                    if (err) return console.error(err);
+                    console.log("New user " + user.username + " successfully registered.");
+                    return callback(null, true);
+                });
+            } else {
+                return callback(null, user.password === MD5(password, MD5key));
+            }
         });
-    };
+    }
                     
     function postAuthenticate(socket, data) {
         var username = data.username;
@@ -30,5 +42,5 @@ module.exports = function (socket) {
         User.findOne({username:username}, function(err, user) {
             socket.client.user = user;
         });
-    };  
+    }  
 };
