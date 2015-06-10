@@ -170,6 +170,8 @@ body {
             h2 {
                 .main-label-styling();  
             }
+            position: relative;
+            padding-bottom: @main-label-height;
             
             width: 50%;
             order: 2;
@@ -202,6 +204,27 @@ body {
                     
                     flex-grow: 0;
                     flex-shrink: 0;    
+                }
+            }
+            
+            #topicStatus {
+                height: @main-label-height;
+                line-height: @main-label-height;
+                width: 100%;
+
+                .background-as-grey-tone(0);
+                text-align: center;
+
+                margin: 0;
+
+                border-top-width: 2px;
+                border-top-style: solid;
+                
+                position: absolute;
+                bottom: 0;
+                
+                #topicNeededPoints {
+                    width: 10px;    
                 }
             }
         }

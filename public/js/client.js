@@ -27,6 +27,9 @@ $(document).ready(function() {
     var newTopicSingleResult = $('#newTopicSingleResult');
     var newTopicNeededPoints = $('#newTopicNeededPoints');
     
+    var topicNeededPoints = $('#topicNeededPoints');
+    var topicSingleResult = $('#topicSingleResult');
+    
     // do usuniecia
     loginText.val("Test");
     passwordText.val("test");
@@ -123,6 +126,9 @@ $(document).ready(function() {
                 $('div.fadeable').block({ message: "Głosowanie zakończone" }); 
             }
             
+            topicNeededPoints.val(obecnyTemat[0].neededPoints);
+            topicSingleResult.prop("checked", obecnyTemat[0].singleResult);
+            
             socket.emit('getPropositionList');
         });
         
@@ -217,5 +223,10 @@ $(document).ready(function() {
         loginText.val("");
         passwordText.val("");
         newPropositionText.val("");
+        newTopicText.val("");
+        newTopicSingleResult.prop("checked", false);
+        newTopicNeededPoints.val("");
+        topicNeededPoints.val("");
+        topicSingleResult.prop("checked", false);
     });
 });
