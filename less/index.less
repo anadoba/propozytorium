@@ -86,8 +86,23 @@ body {
         }
     }
     
+    #topicSelectionContainer {
+        height: @main-label-height;
+        line-height: @main-label-height;
+
+        .background-as-grey-tone(0);
+        text-align: center;
+
+        margin: 0;
+
+        border-width: 2px;
+        border-style: solid;   
+    }
+    
     #topicContainer {
         height: @bar-height;
+        line-height: @main-label-height;
+        
         .frame(1px);
         
         flex-grow: 0;
@@ -223,8 +238,10 @@ body {
                 position: absolute;
                 bottom: 0;
                 
+                font-size: 125%;
+                
                 #topicNeededPoints {
-                    width: 10px;    
+                    width: 10px; 
                 }
             }
         }
